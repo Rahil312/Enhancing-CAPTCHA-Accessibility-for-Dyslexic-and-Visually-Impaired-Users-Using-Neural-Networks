@@ -105,7 +105,173 @@ Flatten
 └── 📄 .gitignore                   # Git ignore rules
 ```
 
-## 🚀 Quick Start
+## � Dataset Information
+
+### 🗂️ CAPTCHA Image Dataset
+
+This project uses a custom CAPTCHA dataset for training and evaluation:
+
+<div align="center">
+
+| **Dataset Details** | **Specification** |
+|---------------------|-------------------|
+| 📸 **Image Format** | JPG/JPEG Grayscale |
+| 📏 **Image Dimensions** | 50×200 pixels |
+| 🔤 **Character Set** | a-z, 0-9 (36 classes) |
+| 📝 **Label Format** | 6-character strings |
+| 📁 **File Naming** | `{label}_{id}.jpg` (e.g., `abc123_001.jpg`) |
+
+</div>
+
+### 📥 Dataset Setup
+
+#### Option 1: Use Your Own Dataset
+1. **Prepare CAPTCHA images** in JPG format (50×200 pixels recommended)
+2. **Name files** following pattern: `{6-character-label}_{unique-id}.jpg`
+3. **Place in folder** and update the path in the notebook:
+   ```python
+   # Update this path in the notebook
+   dataset_path = "/path/to/your/captcha/images/"
+   ```
+
+#### Option 2: Generate Synthetic Dataset
+```python
+# Use libraries like captcha-generator or PIL to create synthetic CAPTCHAs
+pip install captcha
+from captcha.image import ImageCaptcha
+
+# Generate sample CAPTCHAs for testing
+imageCaptcha = ImageCaptcha()
+data = imageCaptcha.generate('abc123')
+```
+
+#### Option 3: Public CAPTCHA Datasets
+- 🌐 **Research Datasets**: Check academic papers for publicly available CAPTCHA datasets
+- 🔍 **Kaggle**: Search for CAPTCHA recognition competitions
+- 📚 **Academic Sources**: University research repositories
+
+### ⚠️ Important Notes
+- 📋 **Ethical Use**: Only use CAPTCHAs you have permission to process
+- 🔒 **Privacy**: Ensure no personal data is contained in CAPTCHA images
+- ⚖️ **Legal**: Respect terms of service when collecting CAPTCHA data
+- 🎯 **Purpose**: This tool is for accessibility research and assistive technology
+
+### 🛠️ Data Preprocessing Pipeline
+```python
+# Example preprocessing steps from the notebook
+def preprocess_captcha(image_path):
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    img = img / 255.0  # Normalize pixel values
+    img = np.reshape(img, (50, 200, 1))  # Reshape for CNN input
+    return img
+```
+
+---
+## 📊 Dataset Information
+
+### 🗂️ CAPTCHA Image Dataset
+
+This project uses a CAPTCHA dataset for training and evaluation. The notebook currently expects images to be stored in Google Drive, but you can adapt it for local storage or other sources.
+
+<div align="center">
+
+| **Dataset Details** | **Specification** |
+|---------------------|-------------------|
+| 📸 **Image Format** | JPG/JPEG Grayscale |
+| 📏 **Image Dimensions** | 50×200 pixels |
+| 🔤 **Character Set** | a-z, 0-9 (36 classes) |
+| 📝 **Label Format** | 6-character strings |
+| 📁 **File Naming** | `{label}_{id}.jpg` (e.g., `abc123_001.jpg`) |
+
+</div>
+
+### 📥 Dataset Setup Options
+
+#### Option 1: Prepare Your Own Dataset
+1. **📸 Collect CAPTCHA images** in JPG format (50×200 pixels recommended)
+2. **🏷️ Name files** following pattern: `{6-character-label}_{unique-id}.jpg`
+3. **📁 Organize in folder** and update the path in the notebook:
+   ```python
+   # Update these paths in the notebook cells
+   dataset_path = "/path/to/your/captcha/images/"
+   # Replace Google Drive paths with your local paths
+   ```
+
+#### Option 2: Generate Synthetic Dataset
+```bash
+# Install CAPTCHA generation library
+pip install captcha Pillow
+```
+```python
+# Generate synthetic CAPTCHAs for testing
+from captcha.image import ImageCaptcha
+import string
+import random
+import os
+
+# Create dataset directory
+os.makedirs('dataset', exist_ok=True)
+
+imageCaptcha = ImageCaptcha(width=200, height=50)
+characters = string.ascii_lowercase + string.digits
+
+# Generate sample dataset
+for i in range(1000):
+    # Create random 6-character label
+    label = ''.join(random.choices(characters, k=6))
+    # Generate CAPTCHA image
+    data = imageCaptcha.generate(label)
+    # Save with proper naming convention
+    imageCaptcha.write(label, f'dataset/{label}_{i:04d}.jpg')
+    
+print(f"Generated 1000 CAPTCHA images in 'dataset' folder")
+```
+
+#### Option 3: Public CAPTCHA Datasets
+- 🌐 **Academic Research**: Check research papers for publicly available datasets
+- 🏆 **Kaggle Competitions**: Search for CAPTCHA recognition challenges
+- 📚 **University Repositories**: Academic institutions often share research datasets
+- 🔍 **GitHub**: Search for "captcha dataset" repositories
+
+### ⚠️ Important Ethical Guidelines
+
+<div align="center">
+
+| ⚖️ **Ethical Consideration** | 📋 **Guideline** |
+|----------------------------|------------------|
+| **Legal Use** | Only use CAPTCHAs you have permission to process |
+| **Privacy Protection** | Ensure no personal data in CAPTCHA images |
+| **Terms Compliance** | Respect website terms of service |
+| **Research Purpose** | Use for accessibility and assistive technology only |
+| **No Malicious Use** | Don't use for bypassing legitimate security |
+
+</div>
+
+### 🛠️ Data Preprocessing Pipeline
+
+The notebook includes preprocessing functions that handle:
+```python
+def preprocess_captcha(image_path):
+    # Load grayscale image
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    
+    # Normalize pixel values (0-1 range)
+    img = img / 255.0
+    
+    # Reshape for CNN input (height, width, channels)
+    img = np.reshape(img, (50, 200, 1))
+    
+    return img
+```
+
+**Key preprocessing steps:**
+- ✅ **Grayscale conversion** for consistent input format
+- ✅ **Pixel normalization** (0-255 → 0-1) for stable training
+- ✅ **Dimension reshaping** to match CNN input requirements
+- ✅ **Label encoding** to one-hot vectors for multi-class prediction
+
+---
+## �🚀 Quick Start
 
 ### Prerequisites
 
@@ -246,7 +412,7 @@ git push origin feature/accessibility-enhancement
 
 ---
 
-## 📄 License & Citation
+## 📄 License
 
 <div align="center">
 
@@ -255,16 +421,7 @@ git push origin feature/accessibility-enhancement
 
 </div>
 
-### 📝 Citation Format
-```bibtex
-@misc{captcha_accessibility_2026,
-  title={Enhancing CAPTCHA Accessibility for Dyslexic and Visually Impaired Users Using Neural Networks},
-  author={Rahil Shukla},
-  year={2026},
-  url={https://github.com/Rahil312/Enhancing-CAPTCHA-Accessibility-for-Dyslexic-and-Visually-Impaired-Users-Using-Neural-Networks},
-  note={Neural Networks Final Project - Semester 2}
-}
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
